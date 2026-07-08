@@ -3,6 +3,7 @@ package taskboard.boundary;
 import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -24,11 +25,12 @@ public class Homepage extends JFrame {
     private String matricola;
     private ProgettoControl progettoControl;
     private DefaultListModel<Progetto> modello;
+    private List<Progetto> progetti;
 
     public Homepage(String matricola) {
     	this.matricola=matricola;
     	this.progettoControl=new ProgettoControl();
-    	this.modello=new DefaultListModel(); 
+    	this.modello=new DefaultListModel<>(); 
 
         setTitle("Homepage");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,8 +59,23 @@ public class Homepage extends JFrame {
         JScrollPane scrollPane = new JScrollPane();
         contentPane.add(scrollPane, BorderLayout.CENTER);
         
-        JList listaProgetti = new JList();
+        JList<Progetto> listaProgetti = new JList<>();
         listaProgetti.setModel(modello);
         scrollPane.setViewportView(listaProgetti);
+        
+        caricaProgetti();
+    }
+    
+    private void caricaProgetti() {
+    	try {
+    		progetti = progettoControl.getProgettiUtente(matricola);
+    		modello.clear();
+    		for(Progetto p : progetti) {
+    			modello.addElement(p);
+    		}
+    	}catch (java.sql.SQLException ex) {
+    		javax.swing.JOptionPane.showMessageDialog(this,"Errore nel caricamento dei progetti", "Errore",javax.swing.JOptionPane.ERROR_MESSAGE);
+    		ex.printStackTrace();
+    	}
     }
 }
