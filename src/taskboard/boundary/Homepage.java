@@ -57,7 +57,7 @@ public class Homepage extends JFrame {
         
         JButton btnCrea = new JButton("Crea");
         panel.add(btnCrea);
-
+        btnCrea.addActionListener(new ActionListener);
         
         JScrollPane scrollPane = new JScrollPane();
         contentPane.add(scrollPane, BorderLayout.CENTER);
