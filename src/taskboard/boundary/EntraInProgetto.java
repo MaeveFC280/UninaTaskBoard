@@ -51,6 +51,7 @@ public class EntraInProgetto extends JFrame {
 		btnNewButton.setBounds(0, 208, 117, 29);
 		panel.add(btnNewButton);
 		
+		
 		JButton btnNewButton_1 = new JButton("Invio");
 		btnNewButton_1.setBounds(317, 208, 117, 29);
 		panel.add(btnNewButton_1);

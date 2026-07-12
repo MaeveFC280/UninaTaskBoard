@@ -5,8 +5,14 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import taskboard.control.ProgettoControl;
+
 import java.awt.GridBagLayout;
+import java.sql.SQLException;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -17,26 +23,7 @@ public class CreaProgetto extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CreaProgetto frame = new CreaProgetto();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	public CreaProgetto() {
+	public CreaProgetto(String matricola) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -61,6 +48,24 @@ public class CreaProgetto extends JFrame {
 		JButton btnCrea = new JButton("Crea");
 		btnCrea.setBounds(327, 237, 117, 29);
 		contentPane.add(btnCrea);
+		btnCrea.addActionListener(e -> {
+    		String nome = Nome.getText();
+    		String desc = Descrizione.getText();
+    		
+    		if(nome.isEmpty() || desc.isEmpty()) {
+    			JOptionPane.showMessageDialog(this, "Compila tutti i campi","Errore di login",JOptionPane.ERROR_MESSAGE);
+    			return;
+    		}
+    		
+    		try {
+    			ProgettoControl progettoControl = new ProgettoControl();
+				progettoControl.creaProgetto(matricola, nome, desc);
+				//entra in nuovo progetto
+    		} catch (SQLException ex) {
+    			JOptionPane.showConfirmDialog(this, ex,"Errore di login",JOptionPane.ERROR_MESSAGE);
+    			ex.printStackTrace();
+    		}
+    });
 		
 		JButton btnIndietro = new JButton("Indietro");
 		btnIndietro.setBounds(6, 237, 117, 29);

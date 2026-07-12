@@ -89,8 +89,7 @@ public class LoginBoundary extends JFrame {
         passwordField.setColumns(15);
 
         JButton btnNewButton = new JButton("Login");
-        btnNewButton.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
+        btnNewButton.addActionListener(e -> {
         		String matricola = textField.getText();
         		String password = new String(passwordField.getPassword());
         		
@@ -112,7 +111,6 @@ public class LoginBoundary extends JFrame {
         			JOptionPane.showConfirmDialog(LoginBoundary.this, ex,"Errore di login",JOptionPane.ERROR_MESSAGE);
         			ex.printStackTrace();
         		}
-        	}
         });
         GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
         gbc_btnNewButton.gridx = 1;

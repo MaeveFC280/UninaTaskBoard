@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -12,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -57,7 +59,11 @@ public class Homepage extends JFrame {
         
         JButton btnCrea = new JButton("Crea");
         panel.add(btnCrea);
-        btnCrea.addActionListener(new ActionListener);
+        btnCrea.addActionListener(e -> {
+        	CreaProgetto crea = new CreaProgetto(matricola);
+        	crea.setVisible(true);
+    		dispose();
+        });
         
         JScrollPane scrollPane = new JScrollPane();
         contentPane.add(scrollPane, BorderLayout.CENTER);
