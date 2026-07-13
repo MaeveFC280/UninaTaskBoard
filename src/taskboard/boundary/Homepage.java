@@ -21,8 +21,6 @@ import taskboard.control.ProgettoControl;
 import taskboard.entity.Progetto;
 
 public class Homepage extends JFrame {
-
-    private static final long serialVersionUID = 1L;
     private JPanel contentPane;
 
     private String matricola;

@@ -20,7 +20,6 @@ import java.awt.Font;
 
 public class CreaProgetto extends JFrame {
 
-	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 
 	public CreaProgetto(String matricola) {
