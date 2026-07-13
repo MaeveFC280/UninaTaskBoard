@@ -47,10 +47,6 @@ public class EntraInProgetto extends JFrame {
 		panel.add(textField);
 		textField.setColumns(10);
 		
-		JButton btnNewButton = new JButton("Indietro");
-		btnNewButton.setBounds(0, 208, 117, 29);
-		panel.add(btnNewButton);
-		
 		
 		JButton btnNewButton_1 = new JButton("Invio");
 		btnNewButton_1.setBounds(317, 208, 117, 29);
