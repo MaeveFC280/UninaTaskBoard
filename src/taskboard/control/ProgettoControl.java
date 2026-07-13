@@ -13,7 +13,7 @@ public class ProgettoControl {
 		return progettoDAO.getProgettiUtenti(matricola);
 	}
 	
-	public void creaProgetto(String nome, String descrizione, String matricolaCreatore) throws SQLException{
+	public void creaProgetto(String matricolaCreatore, String nome, String descrizione) throws SQLException{
 		String codiceInvito = UUID.randomUUID().toString().substring(0,8);
 		progettoDAO.creaProgetto(codiceInvito, nome, descrizione, matricolaCreatore);
 	}

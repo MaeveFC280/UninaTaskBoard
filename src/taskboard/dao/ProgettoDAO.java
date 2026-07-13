@@ -45,7 +45,7 @@ public class ProgettoDAO {
 	
 	public void entraInProgetto(String matricola, String codiceInvito) throws SQLException{
 		Connection con = DBConnection.getDBConnection().getConnection();
-		String query = "INSERT INTO Partecipazione VALUES (?,?)"; 
+		String query = "INSERT INTO Partecipazione (matricolaStudente, codiceprogetto) VALUES (?,?)"; 
 		
 		try (PreparedStatement ps = con.prepareStatement(query)){
 			ps.setString(1, matricola);
@@ -56,9 +56,9 @@ public class ProgettoDAO {
 	
 	public void creaProgetto(String codiceInvito, String nome, String descrizione, String matricolaCreatore) throws SQLException{
 		Connection con = DBConnection.getDBConnection().getConnection();
-		String query1 = "INSERT INTO Progetto VALUES (codiceinvito, nome, descrizione) (?,?,?)"; 
-		String query2 = "INSERT INTO Creazione (matricolaCreatore, codiceInvito) VALUES (?,?)";
-		String query3 = "INSERT INTO Partecipazione (matricolaStudente, codiceInvito) VALUES (?,?)"; //riscrivo per far funziona la transazione
+		String query1 = "INSERT INTO Progetto (codiceinvito, nome, descrizione) VALUES (?,?,?)"; 
+		String query2 = "INSERT INTO Creazione (matricolaCreatore, codiceprogetto) VALUES (?,?)";
+		String query3 = "INSERT INTO Partecipazione (matricolaStudente, codiceprogetto) VALUES (?,?)"; //riscrivo per far funziona la transazione
 		
 		try {
 				con.setAutoCommit(false); //transazione
