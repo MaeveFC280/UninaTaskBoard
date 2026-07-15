@@ -59,7 +59,7 @@ public class CreaProgetto extends JFrame {
     		try {
     			ProgettoControl progettoControl = new ProgettoControl();
 				progettoControl.creaProgetto(matricola, nome, desc);
-				//entra in nuovo progetto
+				 
     		} catch (SQLException ex) {
     			JOptionPane.showConfirmDialog(this, ex,"Errore di login",JOptionPane.ERROR_MESSAGE);
     			ex.printStackTrace();
