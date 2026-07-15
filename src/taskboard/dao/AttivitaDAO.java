@@ -74,6 +74,8 @@ public class AttivitaDAO {
 						}else if("DOCUMENTAZIONE".equalsIgnoreCase(rs.getNString("tipo"))) {
 							a = new AttivitaDocumentazione(rs.getInt("id"), rs.getString("nome"),rs.getString("descrizione"), rs.getDate("dataCreazione"),
 									rs.getDate("dataScadenza"), rs.getString("stato"), codiceProgetto);
+						}else {
+							throw new IllegalArgumentException("Tipo attività non valido: "+ rs.getString("tipo"));
 						}
 						attivita.add(a);
 					}
@@ -81,5 +83,48 @@ public class AttivitaDAO {
 			}
 			return attivita;
 			
+		}
+		
+		public List<String> getResponsabili(int id) throws SQLException{
+			Connection con = DBConnection.getDBConnection().getConnection();
+			List<String> responsabili = new ArrayList<>();
+			String query = "SELECT matricolaStudente FROM assegnazione where idattivita = ?";
+			
+			try(PreparedStatement ps = con.prepareStatement(query)){
+				ps.setInt(1, id);
+				try(ResultSet rs = ps.executeQuery()){
+					while(rs.next()) {
+						responsabili.add(rs.getString(1));
+					}
+				}
+				return responsabili;
+			}
+		}
+		
+		public List<String> getPartecipanti (String id) throws SQLException{
+			Connection con = DBConnection.getDBConnection().getConnection();
+			List<String> partecipanti = new ArrayList<>();
+			String query = "SELECT matricolaStudente FROM partecipazione where codiceprogetto = ?";
+			
+			try(PreparedStatement ps = con.prepareStatement(query)){
+				ps.setString(1, id);
+				try(ResultSet rs = ps.executeQuery()){
+					while(rs.next()) {
+						partecipanti.add(rs.getString(1));
+					}
+				}
+				return partecipanti;
+			}
+		}
+		
+		public void aggiornaStato ( int id, String stato) throws SQLException{
+			Connection con = DBConnection.getDBConnection().getConnection();
+			String q ="UPDATE Attivita SET stato = ? WHERE id = ?";
+			
+			try(PreparedStatement ps = con.prepareStatement(q)){
+				ps.setInt(2, id);
+				ps.setString(1, stato);
+				ps.executeUpdate();
+			}
 		}
 }
