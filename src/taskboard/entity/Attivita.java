@@ -80,7 +80,16 @@ public abstract class Attivita {
 	
 	@Override
 	public String toString() {
-		return nome;
+
+	    if (dataScadenza == null) {
+	    	return nome
+		            + "    |    Stato: " + stato;
+	            
+	    } else {
+	    	return nome
+		            + "    |    Stato: " + stato
+		            + "    |    Scadenza: " + dataScadenza;
+	    }
 	}
 	
 }

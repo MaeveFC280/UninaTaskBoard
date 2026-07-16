@@ -21,6 +21,8 @@ import taskboard.control.AttivitaControl;
 import taskboard.entity.Attivita;
 import taskboard.entity.Progetto;
 import taskboard.entity.Studente;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class VisualizzaProgetto extends JFrame {
 
@@ -67,6 +69,24 @@ public class VisualizzaProgetto extends JFrame {
  
         JList<Attivita> list = new JList<>();
         contentPane.add(new JScrollPane(list), BorderLayout.CENTER);
+        
+        list.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                if (e.getClickCount() == 2) {
+                    Attivita attivitaSelezionata =
+                            list.getSelectedValue();
+                    if (attivitaSelezionata != null) {
+                        VisualizzaAttivita finestra =new VisualizzaAttivita(matricola, progetto, attivitaSelezionata);
+                        finestra.setVisible(true);
+                    }
+                }
+            }
+        });
+        
+        
         try {
 			List<Attivita> listaAttivita = control.getAttivita(progetto.getCodiceInvito());
 			list.setListData(listaAttivita.toArray(new Attivita[0]));
