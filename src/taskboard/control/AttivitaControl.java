@@ -1,19 +1,11 @@
 package taskboard.control;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
-import taskboard.DBConnection;
 import taskboard.dao.AttivitaDAO;
 import taskboard.entity.Attivita;
-import taskboard.entity.AttivitaDocumentazione;
-import taskboard.entity.AttivitaSviluppo;
 import taskboard.entity.Studente;
 
 public class AttivitaControl {

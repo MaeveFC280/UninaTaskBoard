@@ -1,26 +1,24 @@
 package taskboard.boundary;
 
-import java.awt.EventQueue;
+import java.awt.BorderLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import taskboard.entity.Progetto;
-
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.SwingConstants;
-import java.awt.GridLayout;
-import java.awt.FlowLayout;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.SpringLayout;
-import javax.swing.JButton;
-import javax.swing.JSpinner;
 import com.toedter.calendar.JDateChooser;
-import javax.swing.JList;
+
+import taskboard.entity.Progetto;
 
 public class CreaAttivita extends JFrame {
 
@@ -37,10 +35,11 @@ public class CreaAttivita extends JFrame {
 	private JTextField textFieldDescrizione;
 	private JDateChooser dateChooser;
 	private JLabel lblResponsabili;
-	private JList list;
+	private JScrollPane scrollPane;
+	private JList<? extends E> listResponsabili;
 
-	public CreaAttivita(Progetto progetto) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public CreaAttivita(Progetto progetto, String matricola) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -78,6 +77,7 @@ public class CreaAttivita extends JFrame {
 		panel.add(lblTipo);
 		
 		comboBoxTipo = new JComboBox();
+		comboBoxTipo.setModel(new DefaultComboBoxModel(new String[] {"SVILUPPO", "DOCUMENTAZIONE"}));
 		panel.add(comboBoxTipo);
 		
 		lblScadenza = new JLabel("Scadenza");
@@ -93,8 +93,11 @@ public class CreaAttivita extends JFrame {
 		lblResponsabili.setHorizontalAlignment(SwingConstants.RIGHT);
 		panel.add(lblResponsabili);
 		
-		list = new JList();
-		panel.add(list);
+		scrollPane = new JScrollPane();
+		panel.add(scrollPane);
+		
+		listResponsabili = new JList();
+		scrollPane.setViewportView(list);
 		
 		btnCrea = new JButton("Crea");
 		panel_1.add(btnCrea);

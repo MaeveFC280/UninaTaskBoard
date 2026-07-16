@@ -77,7 +77,7 @@ public class VisualizzaProgetto extends JFrame {
         });
         
         btnAggiungi.addActionListener(e -> {
-            CreaAttivita creaAttivita = new CreaAttivita(progetto);
+            CreaAttivita creaAttivita = new CreaAttivita(progetto, matricola);
             creaAttivita.setVisible(true);
             dispose();
         });
