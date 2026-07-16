@@ -4,10 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.sql.Date;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -32,8 +33,9 @@ public class CreaAttivita extends JFrame {
 	private JPanel contentPane;
 	private JTextField textFieldNome;
 	private JTextField textFieldDesc;
+	private AttivitaControl c = new AttivitaControl();
 
-	public CreaAttivita(Progetto progetto) {
+	public CreaAttivita(Progetto progetto, String matricola) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -69,6 +71,7 @@ public class CreaAttivita extends JFrame {
 		panel.add(lbTipo);
 		
 		JComboBox comboBoxTipo = new JComboBox();
+		comboBoxTipo.setModel(new DefaultComboBoxModel(new String[] {"SVILUPPO", "DOCUMENTAZIONE"}));
 		panel.add(comboBoxTipo);
 		
 		JLabel lbScadenza = new JLabel("Scadenza");
@@ -76,6 +79,7 @@ public class CreaAttivita extends JFrame {
 		
 		JDateChooser dateChooser = new JDateChooser();
 		panel.add(dateChooser);
+		dateChooser.setMinSelectableDate(new Date());
 		
 		JLabel lbResp = new JLabel("Responsabile/i");
 		panel.add(lbResp);
@@ -93,15 +97,32 @@ public class CreaAttivita extends JFrame {
 		JButton btnNewButton = new JButton("Crea");
 		panel_1.add(btnNewButton);
 		
+		
+		try {
+			List<Studente> partecipanti = c.getPartecipanti(progetto.getCodiceInvito());
+			list.setListData(partecipanti.toArray(new Studente[0]));
+		}catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(),"Errore nel caricamento dei partecipanti", JOptionPane.ERROR_MESSAGE);
+		}
+		
 		btnNewButton.addActionListener(e -> {
 			String nome = textFieldNome.getText().trim();
 			String descrizione = textFieldDesc.getText().trim();
 			String tipo = (String) comboBoxTipo.getSelectedItem();
-			Date d = (Date) dateChooser.getDate();
+			Date data = dateChooser.getDate();
+			java.sql.Date d;
+			if (data!=null) {
+				d = new java.sql.Date(data.getTime());
+			}else {
+				d=null;
+			}
 			List<Studente> responsabili = list.getSelectedValuesList();
 			try {
-				AttivitaControl AttControl = new AttivitaControl();
-				AttControl.creaAttivita(nome, descrizione, d, tipo, progetto.getCodiceInvito(), responsabili);
+				c.creaAttivita(nome, descrizione, (java.sql.Date) d, tipo, progetto.getCodiceInvito(), responsabili);
+				JOptionPane.showMessageDialog(this, "Atività creata con successo");
+				VisualizzaProgetto vp = new VisualizzaProgetto(matricola, progetto);
+				vp.setVisible(true);
+				dispose();
 				
 			}catch (IllegalArgumentException ex){
 				JOptionPane.showMessageDialog(this, ex.getMessage(),"Dati non validi", JOptionPane.ERROR_MESSAGE);

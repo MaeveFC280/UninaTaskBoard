@@ -6,12 +6,16 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import taskboard.control.ProgettoControl;
+import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.awt.event.ActionEvent;
 
 public class EntraInProgetto extends JFrame {
 
@@ -49,6 +53,32 @@ public class EntraInProgetto extends JFrame {
 		
 		
 		JButton btnNewButton_1 = new JButton("Invio");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String codice = textField.getText().trim();
+				if(codice.isEmpty()) {
+					JOptionPane.showMessageDialog(EntraInProgetto.this, "Inserisci un codice");
+				}
+				
+				try {
+					ProgettoControl control = new ProgettoControl();
+					boolean entrato = control.entraInProgetto(matricola, codice);
+					if(entrato) {
+						JOptionPane.showMessageDialog(EntraInProgetto.this, "Sei entrato nel progetto");
+						Homepage home = new Homepage(matricola);
+						home.setVisible(true);
+						dispose();
+					}else {
+						JOptionPane.showMessageDialog(EntraInProgetto.this, "Il codice non è valido");
+					}
+				}catch(SQLException ex) {
+					JOptionPane.showMessageDialog(EntraInProgetto.this, "C'è stato un errore: "+ ex.getMessage(), "Errore",JOptionPane.ERROR_MESSAGE);
+					Homepage home = new Homepage(matricola);
+					home.setVisible(true);
+					dispose();
+				}
+			}
+		});
 		btnNewButton_1.setBounds(317, 208, 117, 29);
 		panel.add(btnNewButton_1);
 

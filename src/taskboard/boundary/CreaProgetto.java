@@ -17,6 +17,9 @@ import javax.swing.JTextArea;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import javax.swing.JScrollPane;
 
 public class CreaProgetto extends JFrame {
 
@@ -28,25 +31,44 @@ public class CreaProgetto extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.NORTH);
 		
 		JLabel lblTitolo = new JLabel("Crea Progetto");
+		panel.add(lblTitolo);
 		lblTitolo.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		lblTitolo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitolo.setBounds(6, 6, 438, 27);
-		contentPane.add(lblTitolo);
 		
-		JTextArea Nome = new JTextArea();
-		Nome.setBounds(176, 73, 117, 16);
-		contentPane.add(Nome);
-		
-		JTextArea Descrizione = new JTextArea();
-		Descrizione.setBounds(6, 126, 438, 99);
-		contentPane.add(Descrizione);
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.SOUTH);
 		
 		JButton btnCrea = new JButton("Crea");
-		btnCrea.setBounds(327, 237, 117, 29);
-		contentPane.add(btnCrea);
+		panel_1.add(btnCrea);
+		
+		JPanel panel_2 = new JPanel();
+		contentPane.add(panel_2, BorderLayout.CENTER);
+		panel_2.setLayout(new GridLayout(0, 1, 0, 0));
+		
+		JLabel lblNome = new JLabel("Nome");
+		panel_2.add(lblNome);
+		lblNome.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JTextArea Nome = new JTextArea();
+		panel_2.add(Nome);
+		
+		JLabel lblDescrizione = new JLabel("Descrizione");
+		panel_2.add(lblDescrizione);
+		lblDescrizione.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_2.add(scrollPane);
+		
+		JTextArea Descrizione = new JTextArea();
+		scrollPane.setViewportView(Descrizione);
+		Descrizione.setLineWrap(true);
+		Descrizione.setWrapStyleWord(true);
 		btnCrea.addActionListener(e -> {
     		String nome = Nome.getText();
     		String desc = Descrizione.getText();
@@ -65,16 +87,6 @@ public class CreaProgetto extends JFrame {
     			ex.printStackTrace();
     		}
     });
-		
-		JLabel lblNome = new JLabel("Nome");
-		lblNome.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNome.setBounds(16, 45, 428, 16);
-		contentPane.add(lblNome);
-		
-		JLabel lblDescrizione = new JLabel("Descrizione");
-		lblDescrizione.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDescrizione.setBounds(6, 101, 440, 16);
-		contentPane.add(lblDescrizione);
 
 	}
 }

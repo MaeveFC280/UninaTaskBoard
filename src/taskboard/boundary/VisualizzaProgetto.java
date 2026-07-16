@@ -3,24 +3,32 @@ package taskboard.boundary;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.sql.SQLException;
+import java.util.List;
 
 import javax.swing.JButton;  // NB: vedi nota sotto, è JButton
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import taskboard.control.AttivitaControl;
+import taskboard.entity.Attivita;
 import taskboard.entity.Progetto;
+import taskboard.entity.Studente;
 
 public class VisualizzaProgetto extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private String matricola;
     private Progetto progetto;
+    private JLabel codiceInvito;
+    private AttivitaControl control = new AttivitaControl();
 
     public VisualizzaProgetto(String matricola, Progetto progetto) {
         this.matricola = matricola;
@@ -52,10 +60,20 @@ public class VisualizzaProgetto extends JFrame {
         pannelloAlto.add(areaDescrizione, BorderLayout.CENTER);
 
         contentPane.add(pannelloAlto, BorderLayout.NORTH);
+        
+        codiceInvito = new JLabel(progetto.getCodiceInvito());
+        pannelloAlto.add(codiceInvito, BorderLayout.EAST);
 
  
-        JList<Object> listaAttivita = new JList<>();
-        contentPane.add(new JScrollPane(listaAttivita), BorderLayout.CENTER);
+        JList<Attivita> list = new JList<>();
+        contentPane.add(new JScrollPane(list), BorderLayout.CENTER);
+        try {
+			List<Attivita> listaAttivita = control.getAttivita(progetto.getCodiceInvito());
+			list.setListData(listaAttivita.toArray(new Attivita[0]));
+		}catch (SQLException ex) {
+			JOptionPane.showMessageDialog(this, ex.getMessage(),"Errore nel caricamento delle attività", JOptionPane.ERROR_MESSAGE);
+		}
+        
 
  
         JPanel pannelloBottoni = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
