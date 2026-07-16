@@ -1,15 +1,19 @@
 package taskboard.boundary;
 
 import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -18,27 +22,18 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
+import taskboard.control.AttivitaControl;
 import taskboard.entity.Progetto;
+import taskboard.entity.Studente;
 
 public class CreaAttivita extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JPanel panel;
 	private JTextField textFieldNome;
-	private JLabel lblTipo;
-	private JComboBox comboBoxTipo;
-	private JLabel lblScadenza;
-	private final JPanel panel_1 = new JPanel();
-	private JButton btnCrea;
-	private JLabel lblDescrizione;
-	private JTextField textFieldDescrizione;
-	private JDateChooser dateChooser;
-	private JLabel lblResponsabili;
-	private JScrollPane scrollPane;
-	private JList<? extends E> listResponsabili;
+	private JTextField textFieldDesc;
 
-	public CreaAttivita(Progetto progetto, String matricola) {
+	public CreaAttivita(Progetto progetto) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -46,61 +41,76 @@ public class CreaAttivita extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel = new JLabel("Crea Attività");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		contentPane.add(lblNewLabel, BorderLayout.NORTH);
+		JLabel Label = new JLabel("Crea Atività");
+		Label.setHorizontalAlignment(SwingConstants.CENTER);
+		Label.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+		contentPane.add(Label, BorderLayout.NORTH);
 		
-		panel = new JPanel();
-		panel.setBorder(new EmptyBorder(15, 15, 15, 15));
+		JPanel panel = new JPanel();
+		panel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(new GridLayout(5, 2, 10, 0));
+		panel.setLayout(new GridLayout(5, 2, 10, 10));
 		
-		JLabel lblNome = new JLabel("Nome");
-		lblNome.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(lblNome);
+		JLabel lbNome = new JLabel("Nome");
+		panel.add(lbNome);
 		
 		textFieldNome = new JTextField();
 		panel.add(textFieldNome);
 		textFieldNome.setColumns(10);
 		
-		lblDescrizione = new JLabel("Descrizione");
-		lblDescrizione.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(lblDescrizione);
+		JLabel lblDesc = new JLabel("Descrizione");
+		panel.add(lblDesc);
 		
-		textFieldDescrizione = new JTextField();
-		panel.add(textFieldDescrizione);
-		textFieldDescrizione.setColumns(10);
+		textFieldDesc = new JTextField();
+		panel.add(textFieldDesc);
+		textFieldDesc.setColumns(10);
 		
-		lblTipo = new JLabel("Tipo");
-		lblTipo.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(lblTipo);
+		JLabel lbTipo = new JLabel("Tipo");
+		panel.add(lbTipo);
 		
-		comboBoxTipo = new JComboBox();
-		comboBoxTipo.setModel(new DefaultComboBoxModel(new String[] {"SVILUPPO", "DOCUMENTAZIONE"}));
+		JComboBox comboBoxTipo = new JComboBox();
 		panel.add(comboBoxTipo);
 		
-		lblScadenza = new JLabel("Scadenza");
-		lblScadenza.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(lblScadenza);
+		JLabel lbScadenza = new JLabel("Scadenza");
+		panel.add(lbScadenza);
 		
-		dateChooser = new JDateChooser();
+		JDateChooser dateChooser = new JDateChooser();
 		panel.add(dateChooser);
-		contentPane.add(panel_1, BorderLayout.SOUTH);
-		dateChooser.setDate(new java.util.Date());
 		
-		lblResponsabili = new JLabel("Responsabile/i");
-		lblResponsabili.setHorizontalAlignment(SwingConstants.RIGHT);
-		panel.add(lblResponsabili);
+		JLabel lbResp = new JLabel("Responsabile/i");
+		panel.add(lbResp);
 		
-		scrollPane = new JScrollPane();
+		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane);
 		
-		listResponsabili = new JList();
+		JList<Studente> list = new JList<>();
 		scrollPane.setViewportView(list);
 		
-		btnCrea = new JButton("Crea");
-		panel_1.add(btnCrea);
+		JPanel panel_1 = new JPanel();
+		contentPane.add(panel_1, BorderLayout.SOUTH);
+		panel_1.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		
+		JButton btnNewButton = new JButton("Crea");
+		panel_1.add(btnNewButton);
+		
+		btnNewButton.addActionListener(e -> {
+			String nome = textFieldNome.getText().trim();
+			String descrizione = textFieldDesc.getText().trim();
+			String tipo = (String) comboBoxTipo.getSelectedItem();
+			Date d = (Date) dateChooser.getDate();
+			List<Studente> responsabili = list.getSelectedValuesList();
+			try {
+				AttivitaControl AttControl = new AttivitaControl();
+				AttControl.creaAttivita(nome, descrizione, d, tipo, progetto.getCodiceInvito(), responsabili);
+				
+			}catch (IllegalArgumentException ex){
+				JOptionPane.showMessageDialog(this, ex.getMessage(),"Dati non validi", JOptionPane.ERROR_MESSAGE);
+				
+			}catch(SQLException ex) {
+				JOptionPane.showMessageDialog(this, ex.getMessage(),"Errore nella creazione dell'attività", JOptionPane.ERROR_MESSAGE);
+			}
+            
+        });
 
 	}
 

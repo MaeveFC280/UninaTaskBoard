@@ -12,6 +12,18 @@ public class AttivitaControl {
 	private AttivitaDAO DAO = new AttivitaDAO();
 
 	public void creaAttivita(String nome, String descrizione, Date dataScadenza, String tipo, String codiceProgetto, List<Studente> responsabili) throws SQLException{
+		if(responsabili.isEmpty()) {
+			throw new IllegalArgumentException("Seleziona almeno uno studente responsabile.");
+		}
+		if(nome == null || nome.trim().isEmpty()) {
+			throw new IllegalArgumentException("Inserisci un nome per l'attività");
+		}
+		if(nome.length()>100) {
+			throw new IllegalArgumentException("Il nome dell'attività non può essere più lungo di 100 caratteri");
+		}
+		if(descrizione.length()>200) {
+			throw new IllegalArgumentException("La descrizione dell'attività non può essere più lunga di 200 caratteri");
+		}
 		if("SVILUPPO".equalsIgnoreCase(tipo) || "DOCUMENTAZIONE".equalsIgnoreCase(tipo)) {
 			DAO.creaAttivita(nome, descrizione, dataScadenza, "NON INIZIATA", tipo, codiceProgetto, responsabili);
 		}else {
