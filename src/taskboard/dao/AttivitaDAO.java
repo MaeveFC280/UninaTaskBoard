@@ -12,14 +12,12 @@ import java.sql.*;
 import java.sql.Date;
 
 public class AttivitaDAO {
-
-	public AttivitaDAO() {
 		
 		public void creaAttivita(String nome, String descrizione, Date dataScadenza,
 				String stato, String tipo, String codiceProgetto, List<Studente> responsabili) throws SQLException{
 			Connection con = DBConnection.getDBConnection().getConnection();
 			String query1 = "INSERT INTO Attivita (nome, descrizione, dataScadenza, dataCreazione, stato,tipo, codiceprogetto) VALUES (?,?,?, CURRENT_DATE,?,?,?)";
-			String query2 = "INSERT INTO Assegnazione (idattivita, matrcolaStudente) VALUES (?,?)";
+			String query2 = "INSERT INTO Assegnazione (idattivita, matricolaStudente) VALUES (?,?)";
 			
 			try {
 				con.setAutoCommit(false);
@@ -68,10 +66,10 @@ public class AttivitaDAO {
 				try(ResultSet rs = ps.executeQuery()){
 					while(rs.next()) {
 						Attivita a;
-						if ("SVILUPPO".equalsIgnoreCase(rs.getNString("tipo"))) {
+						if ("SVILUPPO".equalsIgnoreCase(rs.getString("tipo"))) {
 							a = new AttivitaSviluppo(rs.getInt("id"), rs.getString("nome"),rs.getString("descrizione"), rs.getDate("dataCreazione"),
 									rs.getDate("dataScadenza"), rs.getString("stato"), codiceProgetto);
-						}else if("DOCUMENTAZIONE".equalsIgnoreCase(rs.getNString("tipo"))) {
+						}else if("DOCUMENTAZIONE".equalsIgnoreCase(rs.getString("tipo"))) {
 							a = new AttivitaDocumentazione(rs.getInt("id"), rs.getString("nome"),rs.getString("descrizione"), rs.getDate("dataCreazione"),
 									rs.getDate("dataScadenza"), rs.getString("stato"), codiceProgetto);
 						}else {
@@ -85,32 +83,32 @@ public class AttivitaDAO {
 			
 		}
 		
-		public List<String> getResponsabili(int id) throws SQLException{
+		public List<Studente> getResponsabili(int id) throws SQLException{
 			Connection con = DBConnection.getDBConnection().getConnection();
-			List<String> responsabili = new ArrayList<>();
-			String query = "SELECT matricolaStudente FROM assegnazione where idattivita = ?";
+			List<Studente> responsabili = new ArrayList<>();
+			String query = "SELECT matricola, nome, cognome FROM assegnazione join studente on matricola=matricolaStudente where idattivita = ?";
 			
 			try(PreparedStatement ps = con.prepareStatement(query)){
 				ps.setInt(1, id);
 				try(ResultSet rs = ps.executeQuery()){
 					while(rs.next()) {
-						responsabili.add(rs.getString(1));
+						responsabili.add(new Studente(rs.getString("matricola"), rs.getString("nome"), rs.getString("cognome")));
 					}
 				}
 				return responsabili;
 			}
 		}
 		
-		public List<String> getPartecipanti (String id) throws SQLException{
+		public List<Studente> getPartecipanti (String id) throws SQLException{
 			Connection con = DBConnection.getDBConnection().getConnection();
-			List<String> partecipanti = new ArrayList<>();
-			String query = "SELECT matricolaStudente FROM partecipazione where codiceprogetto = ?";
+			List<Studente> partecipanti = new ArrayList<>();
+			String query = "SELECT matricola, nome, cognome FROM partecipazione JOIN studente on matricola=matricolastudente WHERE codiceprogetto = ?";
 			
 			try(PreparedStatement ps = con.prepareStatement(query)){
 				ps.setString(1, id);
 				try(ResultSet rs = ps.executeQuery()){
 					while(rs.next()) {
-						partecipanti.add(rs.getString(1));
+						partecipanti.add(new Studente(rs.getString("matricola"), rs.getString("nome"), rs.getString("cognome")));
 					}
 				}
 				return partecipanti;

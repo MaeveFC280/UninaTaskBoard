@@ -20,6 +20,7 @@ import javax.swing.SpringLayout;
 import javax.swing.JButton;
 import javax.swing.JSpinner;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.JList;
 
 public class CreaAttivita extends JFrame {
 
@@ -35,6 +36,8 @@ public class CreaAttivita extends JFrame {
 	private JLabel lblDescrizione;
 	private JTextField textFieldDescrizione;
 	private JDateChooser dateChooser;
+	private JLabel lblResponsabili;
+	private JList list;
 
 	public CreaAttivita(Progetto progetto) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -84,6 +87,14 @@ public class CreaAttivita extends JFrame {
 		dateChooser = new JDateChooser();
 		panel.add(dateChooser);
 		contentPane.add(panel_1, BorderLayout.SOUTH);
+		dateChooser.setDate(new java.util.Date());
+		
+		lblResponsabili = new JLabel("Responsabile/i");
+		lblResponsabili.setHorizontalAlignment(SwingConstants.RIGHT);
+		panel.add(lblResponsabili);
+		
+		list = new JList();
+		panel.add(list);
 		
 		btnCrea = new JButton("Crea");
 		panel_1.add(btnCrea);
