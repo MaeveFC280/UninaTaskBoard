@@ -136,25 +136,25 @@ public class AttivitaDAO {
 			Connection con = DBConnection.getDBConnection().getConnection();
 			
 			//SQL Dinamico per mettere insieme criteri
-			StringBuilder query = new StringBuilder("SELECT id,nome,descrizione,datacreazione,datascadenza,stato,tipo FROM Attivita WHERE codiceProgetto=?");
+			StringBuilder query = new StringBuilder("SELECT id,nome,descrizione,datacreazione,datascadenza,stato,tipo FROM Attivita WHERE codiceProgetto=? ");
 			List<Object> parametri = new ArrayList<>();
 			parametri.add(codiceProgetto);
 			
 			//possibile parametri
 			if (stato != null) {
-				query.append("AND stato =?");
+				query.append("AND stato =? ");
 				parametri.add(stato);
 			}
 			if (tipo != null) {
-				query.append("AND tipo =?");
+				query.append("AND tipo =? ");
 				parametri.add(tipo);
 			}
 			if (matricolaResponsabile != null) {
-				query.append("AND id IN (SELECT idattivita FROM Assegnazione WHERE matricolaStudente = ?)");
+				query.append("AND id IN (SELECT idattivita FROM Assegnazione WHERE matricolaStudente = ? )");
 				parametri.add(matricolaResponsabile);
 			}
 			if (scadenza != null) {
-				query.append("AND dataScadenza <=?");
+				query.append("AND dataScadenza <=? ");
 				parametri.add(scadenza);
 			}
 			

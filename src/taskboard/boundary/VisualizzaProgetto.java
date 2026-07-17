@@ -151,13 +151,13 @@ public class VisualizzaProgetto extends JFrame {
         		String membroF;
         		java.sql.Date scadenzaF;
         		//stato
-        		if("Tutti".equals(filtroStato.getSelectedItem())) {
+        		if("TUTTI".equals(filtroStato.getSelectedItem())) {
         			statoF = null;
         		}else {
         			statoF = (String) filtroStato.getSelectedItem();
         		}
         		//studente
-        		if("Tutti".equals(filtroMembro.getSelectedItem())) {
+        		if("TUTTI".equals(filtroMembro.getSelectedItem())) {
         			membroF = null;
         		}else {
         			Studente selezionato = (Studente) filtroMembro.getSelectedItem();
@@ -172,7 +172,7 @@ public class VisualizzaProgetto extends JFrame {
         		}
         		//tipo
         		if(filtroTipo.getSelectedItem().equals("TUTTI")) {
-        			statoF = null;
+        			tipoF = null;
         		}else {
         			tipoF = (String) filtroTipo.getSelectedItem();
         		}
