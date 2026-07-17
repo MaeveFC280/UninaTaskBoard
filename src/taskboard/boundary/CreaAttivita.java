@@ -43,7 +43,7 @@ public class CreaAttivita extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JLabel Label = new JLabel("Crea Atività");
+		JLabel Label = new JLabel("Crea Attività");
 		Label.setHorizontalAlignment(SwingConstants.CENTER);
 		Label.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
 		contentPane.add(Label, BorderLayout.NORTH);
@@ -119,7 +119,7 @@ public class CreaAttivita extends JFrame {
 			List<Studente> responsabili = list.getSelectedValuesList();
 			try {
 				c.creaAttivita(nome, descrizione, (java.sql.Date) d, tipo, progetto.getCodiceInvito(), responsabili);
-				JOptionPane.showMessageDialog(this, "Atività creata con successo");
+				JOptionPane.showMessageDialog(this, "Attività creata con successo");
 				VisualizzaProgetto vp = new VisualizzaProgetto(matricola, progetto);
 				vp.setVisible(true);
 				dispose();

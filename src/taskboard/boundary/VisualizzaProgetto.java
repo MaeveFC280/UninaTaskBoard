@@ -23,6 +23,8 @@ import taskboard.entity.Progetto;
 import taskboard.entity.Studente;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VisualizzaProgetto extends JFrame {
 
@@ -101,6 +103,13 @@ public class VisualizzaProgetto extends JFrame {
         JButton btnCerca = new JButton("Cerca");
         JButton btnAggiungi = new JButton("Aggiungi attività");
         JButton btnReport = new JButton("Report");
+        btnReport.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		Report report =new Report(progetto);
+        		report.setVisible(true);
+        	}
+        });
+        
         pannelloBottoni.add(btnHome);
         pannelloBottoni.add(btnCerca);
         pannelloBottoni.add(btnAggiungi);

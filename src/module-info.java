@@ -8,5 +8,5 @@ module UninaTaskBoard {
 	requires java.desktop;
 	requires java.sql;
 	requires jcalendar;
-	requires jfreechart;
+	requires org.jfree.jfreechart;
 }

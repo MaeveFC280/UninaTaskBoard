@@ -45,7 +45,14 @@ public class AttivitaControl {
 	}
 	
 	public List<Attivita> getAttivita(String codiceProgetto) throws SQLException{
-		return DAO.getAttivita(codiceProgetto);
+		List<Attivita> lista = DAO.getAttivita(codiceProgetto);
+		java.util.Date oggi = java.sql.Date.valueOf(LocalDate.now());
+		for(Attivita a :lista) {
+			if(a.getDataScadenza() != null && a.getDataScadenza().before(oggi) && a.getStato() != "COMPLETATO") {
+				scadenzaAttivita(a);
+			}
+		}
+		return lista;
 	}
 	
 	public List<Studente> getResponsabili(int id) throws SQLException{
@@ -56,16 +63,20 @@ public class AttivitaControl {
 		return DAO.getPartecipanti(id);
 	}
 	
-	public void completaAttivita ( int id) throws SQLException{
-		DAO.aggiornaStato(id, "COMPLETATO");
+	public void completaAttivita (Attivita a) throws SQLException{
+		DAO.aggiornaStato(a.getId(), "COMPLETATO");
+		a.setStato("SCADUTO");
 	}
 	
-	public void scadenzaAttivita ( int id) throws SQLException{
-		DAO.aggiornaStato(id, "SCADUTO");
+	
+	public void svolgimentoAttivita (Attivita a) throws SQLException{
+		DAO.aggiornaStato(a.getId(), "IN CORSO");
+		a.setStato("SCADUTO");
 	}
 	
-	public void svolgimentoAttivita ( int id) throws SQLException{
-		DAO.aggiornaStato(id, "IN CORSO");
+	public void scadenzaAttivita (Attivita a) throws SQLException{
+		DAO.aggiornaStato(a.getId(), "SCADUTO");
+		a.setStato("SCADUTO");
 	}
 }
 

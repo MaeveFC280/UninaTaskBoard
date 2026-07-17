@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -140,6 +142,12 @@ public class VisualizzaAttivita extends JFrame {
         });
 
         JButton btnCommenti = new JButton("Commenti");
+        btnCommenti.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		VisualizzaCommenti vc = new VisualizzaCommenti(matricola,attivita);
+        		vc.setVisible(true);
+        	}
+        });
         pannelloBottoni.add(btnCommenti);
 
         btnStato = new JButton();
@@ -180,7 +188,7 @@ public class VisualizzaAttivita extends JFrame {
             String statoCorrente = attivita.getStato();
 
             if ("NON INIZIATO".equals(statoCorrente)) {
-                control.svolgimentoAttivita(attivita.getId());
+                control.svolgimentoAttivita(attivita);
                 attivita.setStato("IN CORSO");
 
                 JOptionPane.showMessageDialog(
@@ -197,7 +205,7 @@ public class VisualizzaAttivita extends JFrame {
                 );
 
                 if (scelta == JOptionPane.YES_OPTION) {
-                    control.completaAttivita(attivita.getId());
+                    control.completaAttivita(attivita);
                     attivita.setStato("COMPLETATO");
 
                     JOptionPane.showMessageDialog(
