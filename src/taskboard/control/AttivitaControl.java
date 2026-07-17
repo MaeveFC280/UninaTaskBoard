@@ -78,5 +78,9 @@ public class AttivitaControl {
 		DAO.aggiornaStato(a.getId(), "SCADUTO");
 		a.setStato("SCADUTO");
 	}
+	
+	public List<Attivita> filtraAttivita(String codiceProgetto, String stato, String tipo, String matricolaMembro, Date scadenzaEntro) throws SQLException{
+		return DAO.filtraAttivita(codiceProgetto, stato, tipo, matricolaMembro, scadenzaEntro);
+	}
 }
 

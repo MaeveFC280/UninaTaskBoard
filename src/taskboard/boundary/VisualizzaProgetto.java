@@ -25,6 +25,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
+import com.toedter.calendar.JDateChooser;
+import javax.swing.DefaultComboBoxModel;
 
 public class VisualizzaProgetto extends JFrame {
 
@@ -67,6 +70,46 @@ public class VisualizzaProgetto extends JFrame {
         
         codiceInvito = new JLabel(progetto.getCodiceInvito());
         pannelloAlto.add(codiceInvito, BorderLayout.EAST);
+        
+        JPanel pannelloFiltri = new JPanel();
+        pannelloAlto.add(pannelloFiltri, BorderLayout.SOUTH);
+        
+        JLabel lblNewLabel = new JLabel("Stato");
+        lblNewLabel.setToolTipText("");
+        pannelloFiltri.add(lblNewLabel);
+        
+        JComboBox filtroStato = new JComboBox();
+        filtroStato.setModel(new DefaultComboBoxModel(new String[] {"TUTTI", "NON INIZIATO", "IN CORSO", "COMPLETATO", "SCADUTO"}));
+        pannelloFiltri.add(filtroStato);
+        
+        JLabel lblNewLabel_1 = new JLabel("Tipo");
+        pannelloFiltri.add(lblNewLabel_1);
+        
+        JComboBox filtroTipo = new JComboBox();
+        filtroTipo.setModel(new DefaultComboBoxModel(new String[] {"TUTTI", "SVILUPPO", "DOCUMENTAZIONE"}));
+        pannelloFiltri.add(filtroTipo);
+        
+        JLabel lblNewLabel_2 = new JLabel("Membro:");
+        pannelloFiltri.add(lblNewLabel_2);
+        
+        JComboBox filtroMembro = new JComboBox();
+        pannelloFiltri.add(filtroMembro);
+        
+        JLabel lblNewLabel_3 = new JLabel("Scadenza entro:");
+        pannelloFiltri.add(lblNewLabel_3);
+        
+        JDateChooser filtroScadenza = new JDateChooser();
+        pannelloFiltri.add(filtroScadenza);
+        
+        //popolo filtro membri
+        filtroMembro.addItem("TUTTI");
+        try {
+        	for(Studente s: control.getPartecipanti(progetto.getCodiceInvito())) {
+        		filtroMembro.addItem(s);
+        	}
+        }catch(SQLException ex) {
+        	//solo TUTTI = no filtro
+        }
 
  
         JList<Attivita> list = new JList<>();
@@ -101,6 +144,49 @@ public class VisualizzaProgetto extends JFrame {
         JPanel pannelloBottoni = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         JButton btnHome = new JButton("Home");
         JButton btnCerca = new JButton("Cerca");
+        btnCerca.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		String statoF;
+        		String tipoF;
+        		String membroF;
+        		java.sql.Date scadenzaF;
+        		//stato
+        		if("Tutti".equals(filtroStato.getSelectedItem())) {
+        			statoF = null;
+        		}else {
+        			statoF = (String) filtroStato.getSelectedItem();
+        		}
+        		//studente
+        		if("Tutti".equals(filtroMembro.getSelectedItem())) {
+        			membroF = null;
+        		}else {
+        			Studente selezionato = (Studente) filtroMembro.getSelectedItem();
+        			membroF = selezionato.getMatricola();
+        		}
+        		//scadenza
+        		java.util.Date d = filtroScadenza.getDate();
+        		if(d!=null) {
+        			scadenzaF = new java.sql.Date(d.getTime());
+        		}else {
+        			scadenzaF=null;
+        		}
+        		//tipo
+        		if(filtroTipo.getSelectedItem().equals("TUTTI")) {
+        			statoF = null;
+        		}else {
+        			tipoF = (String) filtroTipo.getSelectedItem();
+        		}
+        		
+        		//ricerca
+        		try{
+        			List<Attivita> filtro = control.filtraAttivita(progetto.getCodiceInvito(), statoF, tipoF, membroF, scadenzaF);
+        			list.setListData(filtro.toArray(new Attivita[0]));
+        		}catch (SQLException ex) {
+        			JOptionPane.showMessageDialog(VisualizzaProgetto.this, ex.getMessage(),"Errore", JOptionPane.ERROR_MESSAGE);
+        		}
+        				
+        	}
+        });
         JButton btnAggiungi = new JButton("Aggiungi attività");
         JButton btnReport = new JButton("Report");
         btnReport.addActionListener(new ActionListener() {
@@ -128,6 +214,9 @@ public class VisualizzaProgetto extends JFrame {
             creaAttivita.setVisible(true);
             dispose();
         });
+        
+        
+        
     }
 }
 

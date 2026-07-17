@@ -1,15 +1,19 @@
 package taskboard.dao;
 
-import java.util.*;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import taskboard.DBConnection;
 import taskboard.entity.Attivita;
 import taskboard.entity.AttivitaDocumentazione;
 import taskboard.entity.AttivitaSviluppo;
 import taskboard.entity.Studente;
-
-import java.sql.*;
-import java.sql.Date;
 
 public class AttivitaDAO {
 		
@@ -124,5 +128,56 @@ public class AttivitaDAO {
 				ps.setString(1, stato);
 				ps.executeUpdate();
 			}
+		}
+		
+		public List<Attivita> filtraAttivita(String codiceProgetto, String stato, String tipo,
+				String matricolaResponsabile, Date scadenza) throws SQLException{
+			List<Attivita> risultato = new ArrayList();
+			Connection con = DBConnection.getDBConnection().getConnection();
+			
+			//SQL Dinamico per mettere insieme criteri
+			StringBuilder query = new StringBuilder("SELECT id,nome,descrizione,datacreazione,datascadenza,stato,tipo FROM Attivita WHERE codiceProgetto=?");
+			List<Object> parametri = new ArrayList<>();
+			parametri.add(codiceProgetto);
+			
+			//possibile parametri
+			if (stato != null) {
+				query.append("AND stato =?");
+				parametri.add(stato);
+			}
+			if (tipo != null) {
+				query.append("AND tipo =?");
+				parametri.add(tipo);
+			}
+			if (matricolaResponsabile != null) {
+				query.append("AND id IN (SELECT idattivita FROM Assegnazione WHERE matricolaStudente = ?)");
+				parametri.add(matricolaResponsabile);
+			}
+			if (scadenza != null) {
+				query.append("AND dataScadenza <=?");
+				parametri.add(scadenza);
+			}
+			
+			try(PreparedStatement ps = con.prepareStatement(query.toString())){
+				for (int i = 0; i<parametri.size(); i++) {
+					ps.setObject(i+1, parametri.get(i));
+				}
+				try(ResultSet rs = ps.executeQuery()){
+					while(rs.next()) {
+						Attivita a;
+						if ("SVILUPPO".equalsIgnoreCase(rs.getString("tipo"))) {
+							a = new AttivitaSviluppo(rs.getInt("id"), rs.getString("nome"),rs.getString("descrizione"), rs.getDate("dataCreazione"),
+									rs.getDate("dataScadenza"), rs.getString("stato"), codiceProgetto);
+						}else if("DOCUMENTAZIONE".equalsIgnoreCase(rs.getString("tipo"))) {
+							a = new AttivitaDocumentazione(rs.getInt("id"), rs.getString("nome"),rs.getString("descrizione"), rs.getDate("dataCreazione"),
+									rs.getDate("dataScadenza"), rs.getString("stato"), codiceProgetto);
+						}else {
+							throw new IllegalArgumentException("Tipo attività non valido: "+ rs.getString("tipo"));
+						}
+						risultato.add(a);
+					}
+				}
+			}
+			return risultato;
 		}
 }
