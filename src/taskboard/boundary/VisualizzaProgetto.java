@@ -6,7 +6,7 @@ import java.awt.Font;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.swing.JButton;  // NB: vedi nota sotto, è JButton
+import javax.swing.JButton;  
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -42,7 +42,7 @@ public class VisualizzaProgetto extends JFrame {
         this.progetto = progetto;
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setBounds(100, 100, 600, 450);
+        setBounds(100, 100, 900, 500);
 
         JPanel contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));

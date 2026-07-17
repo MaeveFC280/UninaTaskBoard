@@ -58,6 +58,7 @@ public class EntraInProgetto extends JFrame {
 				String codice = textField.getText().trim();
 				if(codice.isEmpty()) {
 					JOptionPane.showMessageDialog(EntraInProgetto.this, "Inserisci un codice");
+					return;
 				}
 				
 				try {
@@ -65,16 +66,12 @@ public class EntraInProgetto extends JFrame {
 					boolean entrato = control.entraInProgetto(matricola, codice);
 					if(entrato) {
 						JOptionPane.showMessageDialog(EntraInProgetto.this, "Sei entrato nel progetto");
-						Homepage home = new Homepage(matricola);
-						home.setVisible(true);
 						dispose();
 					}else {
 						JOptionPane.showMessageDialog(EntraInProgetto.this, "Il codice non è valido");
 					}
 				}catch(SQLException ex) {
 					JOptionPane.showMessageDialog(EntraInProgetto.this, "C'è stato un errore: "+ ex.getMessage(), "Errore",JOptionPane.ERROR_MESSAGE);
-					Homepage home = new Homepage(matricola);
-					home.setVisible(true);
 					dispose();
 				}
 			}

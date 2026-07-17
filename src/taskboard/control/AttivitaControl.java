@@ -48,7 +48,7 @@ public class AttivitaControl {
 		List<Attivita> lista = DAO.getAttivita(codiceProgetto);
 		java.util.Date oggi = java.sql.Date.valueOf(LocalDate.now());
 		for(Attivita a :lista) {
-			if(a.getDataScadenza() != null && a.getDataScadenza().before(oggi) && a.getStato() != "COMPLETATO") {
+			if(a.getDataScadenza() != null && a.getDataScadenza().before(oggi) && !"COMPLETATO".equals(a.getStato())) {
 				scadenzaAttivita(a);
 			}
 		}
@@ -65,13 +65,13 @@ public class AttivitaControl {
 	
 	public void completaAttivita (Attivita a) throws SQLException{
 		DAO.aggiornaStato(a.getId(), "COMPLETATO");
-		a.setStato("SCADUTO");
+		a.setStato("COMPLETATO");
 	}
 	
 	
 	public void svolgimentoAttivita (Attivita a) throws SQLException{
 		DAO.aggiornaStato(a.getId(), "IN CORSO");
-		a.setStato("SCADUTO");
+		a.setStato("IN CORSO");
 	}
 	
 	public void scadenzaAttivita (Attivita a) throws SQLException{

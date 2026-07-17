@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import taskboard.dao.CommentoControl;
+import taskboard.control.CommentoControl;
 import taskboard.entity.Attivita;
 import taskboard.entity.Commento;
 

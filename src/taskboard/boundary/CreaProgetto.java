@@ -70,8 +70,8 @@ public class CreaProgetto extends JFrame {
 		Descrizione.setLineWrap(true);
 		Descrizione.setWrapStyleWord(true);
 		btnCrea.addActionListener(e -> {
-    		String nome = Nome.getText();
-    		String desc = Descrizione.getText();
+    		String nome = Nome.getText().trim();
+    		String desc = Descrizione.getText().trim();
     		
     		if(nome.isEmpty() || desc.isEmpty()) {
     			JOptionPane.showMessageDialog(this, "Compila tutti i campi","Errore di login",JOptionPane.ERROR_MESSAGE);
@@ -81,10 +81,14 @@ public class CreaProgetto extends JFrame {
     		try {
     			ProgettoControl progettoControl = new ProgettoControl();
 				progettoControl.creaProgetto(matricola, nome, desc);
+				JOptionPane.showMessageDialog(this, "Progetto creato");
+				dispose();
 				 
     		} catch (SQLException ex) {
-    			JOptionPane.showConfirmDialog(this, ex,"Errore di login",JOptionPane.ERROR_MESSAGE);
+    			JOptionPane.showConfirmDialog(this, ex,"Errore nella creazione del progetto",JOptionPane.ERROR_MESSAGE);
     			ex.printStackTrace();
+    		}catch(IllegalArgumentException ex) {
+    			JOptionPane.showConfirmDialog(this, ex,"Dati invalidi",JOptionPane.ERROR_MESSAGE);
     		}
     });
 

@@ -201,7 +201,6 @@ public class VisualizzaAttivita extends JFrame {
 
             if ("NON INIZIATO".equals(statoCorrente)) {
                 control.svolgimentoAttivita(attivita);
-                attivita.setStato("IN CORSO");
 
                 JOptionPane.showMessageDialog(
                         this,
@@ -218,7 +217,6 @@ public class VisualizzaAttivita extends JFrame {
 
                 if (scelta == JOptionPane.YES_OPTION) {
                     control.completaAttivita(attivita);
-                    attivita.setStato("COMPLETATO");
 
                     JOptionPane.showMessageDialog(
                             this,
