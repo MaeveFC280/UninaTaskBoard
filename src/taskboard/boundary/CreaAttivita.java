@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -88,6 +89,7 @@ public class CreaAttivita extends JFrame {
 		panel.add(scrollPane);
 		
 		JList<Studente> list = new JList<>();
+		list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		scrollPane.setViewportView(list);
 		
 		JPanel panel_1 = new JPanel();

@@ -32,6 +32,7 @@ public class VisualizzaAttivita extends JFrame {
     private JPanel contentPane;
     private AttivitaControl control = new AttivitaControl();
     private Attivita attivita;
+    private boolean utenteResponsabile;
 
     private JButton btnStato;
     private JLabel txtStato;
@@ -121,6 +122,11 @@ public class VisualizzaAttivita extends JFrame {
         try {
             List<Studente> responsabili = control.getResponsabili(attivita.getId());
             listResponsabili.setListData(responsabili.toArray(new Studente[0]));
+            for(Studente s : responsabili) {
+            	if (s.getMatricola().equals(matricola)) {
+            		utenteResponsabile=true;
+            	}
+            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(
                     this,
@@ -151,11 +157,12 @@ public class VisualizzaAttivita extends JFrame {
         pannelloBottoni.add(btnCommenti);
 
         btnStato = new JButton();
-        pannelloBottoni.add(btnStato);
-
-        btnStato.addActionListener(e -> {
-            cambiaStatoAttivita();
+        btnStato.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		cambiaStatoAttivita();
+        	}
         });
+        pannelloBottoni.add(btnStato);
 
         aggiornaPulsanteStato();
     }
@@ -180,6 +187,11 @@ public class VisualizzaAttivita extends JFrame {
         } else {
             btnStato.setText("Stato non riconosciuto");
             btnStato.setEnabled(false);
+        }
+        
+        if(!utenteResponsabile) {
+        	btnStato.setEnabled(false);
+        	btnStato.setToolTipText("Solo i responsabili possono cambiare lo stato di un'attività");
         }
     }
 

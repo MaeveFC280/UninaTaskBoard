@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +18,7 @@ import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import taskboard.control.ReportControl;
 import taskboard.entity.Progetto;
 
 public class Report extends JFrame {
@@ -27,7 +29,7 @@ public class Report extends JFrame {
 	private JPanel panelGrafici;
 
 	public Report(Progetto progetto) {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -57,7 +59,7 @@ public class Report extends JFrame {
 			int completati = control.contaCompletati(progetto);
 			int inCorso = control.contaInCorso(progetto);
 			int scaduti = totale-NONIniziati-completati-inCorso;
-			int completatoStudente = control.statisticheStudente(progetto);
+			HashMap<String, Integer> completatoStudente = control.statisticheStudente(progetto);
 			int sviluppo = control.contaSviluppo(progetto);
 			
 			panelNumeri.add(new JLabel("Attività totali: "+ totale));
@@ -67,7 +69,7 @@ public class Report extends JFrame {
 			panelNumeri.add(new JLabel("Attività scadute: "+ scaduti));
 			panelNumeri.add(new JLabel("Attività di sviluppo: "+ sviluppo));
 			
-			
+			//stat attivita
 			DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 			dataset.addValue(completati, "Attività", "Completate");
 			dataset.addValue(inCorso, "Attività", "In corso");
@@ -82,7 +84,25 @@ public class Report extends JFrame {
 			
 			panelGrafici.add(new ChartPanel(chart));
 			
-		}catch(Exception ex) {
+			//stat studenti
+			DefaultCategoryDataset dataStudenti = new DefaultCategoryDataset();
+			
+
+			for (String nominativo : completatoStudente.keySet()) {
+			    int numeroCompletamenti = completatoStudente.get(nominativo);
+			    dataStudenti.addValue(numeroCompletamenti, "Attività completate", nominativo);
+			}
+
+			JFreeChart chartStudenti = ChartFactory.createBarChart(
+			        "Attività completate per studente",
+			        "Studente",
+			        "Numero attività",
+			        dataStudenti
+			);
+
+			panelGrafici.add(new ChartPanel(chartStudenti));
+			
+		}catch(SQLException ex) {
 			JOptionPane.showMessageDialog(this, ex.getMessage(), "Errore nella generazione del report", JOptionPane.ERROR_MESSAGE);
 		}
 
